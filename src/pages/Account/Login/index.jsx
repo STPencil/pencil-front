@@ -12,14 +12,14 @@ const MainWrapper = styled.div`
     display: flex;
   }
   .left-side {
-    width: 60%;
+    width:50%;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
   .right-side {
-    width: 40%;
+    width: 50%;
     background-size: contain;
   }
   .input-wrapper {
