@@ -1,10 +1,9 @@
 // eslint-disable-next-line
-
-import React from "react";
+// eslint-disable-next-line
+import React, {useState} from "react";
 import styled from "styled-components";
 import { IconButton } from '@mui/material';
-import { NavigateBeforeRounded, BookmarkBorderOutlined, ShareRounded, KeyboardArrowDownRounded, UndoRounded, RedoRounded, NoteAddOutlined, MoreHoriz, 
-    SaveOutlined, Edit, Crop32Outlined, BorderColorOutlined ,FormatShapes, InsertPhotoOutlined} from "@mui/icons-material";
+import { NavigateBeforeRounded, UndoRounded, RedoRounded, NoteAddOutlined, SaveOutlined, Edit, Crop32Outlined, BorderColorOutlined ,FormatShapes} from "@mui/icons-material";
 
 const HeaderWrapper = styled.div`
     width : 100vw;
@@ -61,37 +60,34 @@ const toolButtonStyles = {
     color: "black",
  };
 
-
+// NoteHeader 부분 
 const NoteHeader = ({children}) => 
 {
+    // eslint-disable-next-line
+    const [isOpen, setOpen] = useState(false); // 기본 false
+
     return(
     <>
         <HeaderWrapper>
             <div className="menubar">
                 <div className="left">
                     <IconButton aria-label="back" disableRipple><NavigateBeforeRounded sx={iconButtonStyles} fontSize="large"/></IconButton>
-                    <IconButton aria-label="bookmark" disableRipple><BookmarkBorderOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
-                    <IconButton aria-label="share" disableRipple><ShareRounded sx={iconButtonStyles} fontSize="medium"/></IconButton>
                     <IconButton aria-label="save" disableRipple><SaveOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
                 </div>
                 <div className="center">
                     <span> {children} </span>
-                    <IconButton aria-label="title" disableRipple><KeyboardArrowDownRounded sx={iconButtonStyles} fontSize="small"/></IconButton>
                 </div>
                 <div className="right">
                     <IconButton aria-label="undo" disableRipple><UndoRounded sx={iconButtonStyles} fontSize="medium"/></IconButton>
                     <IconButton aria-label="redo" disableRipple><RedoRounded sx={iconButtonStyles} fontSize="medium"/></IconButton>
                     <IconButton aria-label="noteAdd" disableRipple><NoteAddOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
-                    <IconButton aria-label="more" disableRipple><MoreHoriz sx={iconButtonStyles} fontSize="medium"/></IconButton>
                 </div>
             </div>
             <div className="toolbar"> 
-                    <IconButton aria-label="pen" disableRipple ><Edit sx={toolButtonStyles} fontSize="40px"/></IconButton>
+                    <IconButton aria-label="pen" onClick={() => {}} disableRipple ><Edit sx={toolButtonStyles} fontSize="40px"/></IconButton>
                     <IconButton aria-label="erasor" disableRipple><Crop32Outlined sx={toolButtonStyles} fontSize="40px"/></IconButton>
                     <IconButton aria-label="highlighter" disableRipple><BorderColorOutlined sx={toolButtonStyles} fontSize="40px"/></IconButton>
-                    <IconButton aria-label="picture" disableRipple><InsertPhotoOutlined sx={toolButtonStyles} fontSize="40px"/></IconButton>
                     <IconButton aria-label="text" disableRipple><FormatShapes sx={toolButtonStyles} fontSize="40px"/></IconButton>
-                    <IconButton aria-label="back" disableRipple><MoreHoriz sx={toolButtonStyles} fontSize="40px"/></IconButton>
             </div>
             
         </HeaderWrapper>
