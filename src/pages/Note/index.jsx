@@ -1,8 +1,7 @@
-/* eslint-disable */
-import React from "react";
+import React, {useRef, useEffect} from "react";
 import styled from "styled-components";
 import { useOnDraw } from "../../components/NoteLayout/CanvasHook";
-import {IconButton } from '@mui/material';
+import {ButtonGroup, IconButton } from '@mui/material';
 import { NavigateBeforeRounded, UndoRounded, RedoRounded, NoteAddOutlined, SaveOutlined, Edit, Crop32Outlined, BorderColorOutlined ,FormatShapes} from "@mui/icons-material";
 import { jsPDF } from "jspdf";
 
@@ -51,6 +50,11 @@ const HeaderWrapper = styled.div`
         text-align: center;
     }
 
+    button{
+      background-color:transparent;
+      border:none;
+    }
+
 `;
 
 const CanvasStyle = styled.div`
@@ -87,10 +91,19 @@ const NoteWrapper = styled.div`
     }
 `;
 
-const Index = () => {
+const Index = (title) => {
 
   const {setCanvasRef, onMouseDown} = useOnDraw(onDraw); // canvas ref 설정
   const personInfo = useRef();
+
+  useEffect(function() {
+    setCanvasRef(personInfo.current);
+    var ctx = document.getElementById("canvas").getContext("2d");
+    ctx.fillStyle = "#FFF";
+    ctx.fillRect(0, 0, 500, 500);
+    // personInfo.current.fillRect(0, 0, personInfo.current.width, personInfo.current.height)
+
+  }, [personInfo.current]);
 
   // 그림그리는 function 만들기
   function onDraw(ctx, point, prevPoint){
@@ -115,26 +128,35 @@ const Index = () => {
       ctx.fill();
   }
 
-  function clickDownLoad(){
-    var canvas = personInfo.current;
-    var imageData = canvas.toDataURL("image/jpeg", 1.0);
-    var pdf = new jsPDF();
-
-    pdf.addImage(imageData, ' JPEG', 0, 0);
+  const onCickSave = function () { // 사진 저장 
+    var imageData = personInfo.current.toDataURL(); // ref를 부여한 요소에 .current로 접근
+    // imageData.save("download.jpg");
+    var pdf = new jsPDF('p', 'mm');
+    console.log(imageData)
+    pdf.addImage(imageData, 'png', 0, 0);
     pdf.save("download.pdf");
+  };
+
+  const onClickBack = function(){
+    
   }
 
+
+  
     return(   
       <NoteWrapper>
         <HeaderWrapper>
             <div className="menubar">
                 <div className="left">
-                        <IconButton aria-label="back" disableRipple><NavigateBeforeRounded sx={iconButtonStyles} fontSize="large"/></IconButton>
-                        <IconButton aria-label="save" disableRipple><SaveOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
-                    
+                        <button>
+                          <IconButton aria-label="back" disableRipple><NavigateBeforeRounded sx={iconButtonStyles} fontSize="large"/></IconButton>
+                        </button>
+                        <button onClick={onClick} >
+                              <IconButton aria-label="save" disableRipple><SaveOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
+                        </button>
                 </div>
                 <div className="center">
-                    <span> 웹 프로그래밍 </span>
+                    <span> {title} </span>
                 </div>
                 <div className="right">
                     <IconButton aria-label="undo" disableRipple><UndoRounded sx={iconButtonStyles} fontSize="medium"/></IconButton>
@@ -152,8 +174,7 @@ const Index = () => {
         </HeaderWrapper>
         <div className="content">
           <CanvasStyle>
-            <canvas ref={personInfo} width={500} height={500} onMouseDown={onMouseDown} ref={setCanvasRef}/> 
-            <button text="다운로드" onClick={clickDownLoad()} />
+            <canvas id="canvas" ref={personInfo} width={500} height={500} onMouseDown={onMouseDown} /> 
           </CanvasStyle>
         </div>
       </NoteWrapper>
