@@ -2,6 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useOnDraw } from "./CanvasHook";
+import { jsPDF } from "jspdf";
 
 const CanvasStyle = styled.div`
     canvas{
@@ -37,6 +38,16 @@ const NoteCanvas = ({
       ctx.beginPath();
       ctx.arc(start.x, start.y, 2, 0, 2*Math.PI);
       ctx.fill();
+  }
+
+  function clickDownLoad(){
+    
+    console.log();
+    //var imageData = canvas.toDataURL("image/jpeg", 1.0);
+    //var pdf = new jsPDF();
+
+    //pdf.addImage(imageData, ' JPEG', 0, 0);
+    //pdf.save("download.pdf");
   }
 
   return (

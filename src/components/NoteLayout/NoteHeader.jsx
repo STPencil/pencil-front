@@ -1,8 +1,9 @@
 // eslint-disable-next-line
 // eslint-disable-next-line
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
+import { clickDownLoad } from "./ToolHook";
 import styled from "styled-components";
-import { IconButton } from '@mui/material';
+import {IconButton } from '@mui/material';
 import { NavigateBeforeRounded, UndoRounded, RedoRounded, NoteAddOutlined, SaveOutlined, Edit, Crop32Outlined, BorderColorOutlined ,FormatShapes} from "@mui/icons-material";
 
 const HeaderWrapper = styled.div`
@@ -63,16 +64,20 @@ const toolButtonStyles = {
 // NoteHeader 부분 
 const NoteHeader = ({children}) => 
 {
-    // eslint-disable-next-line
-    const [isOpen, setOpen] = useState(false); // 기본 false
+    var canvas = useRef(null);
 
     return(
     <>
         <HeaderWrapper>
             <div className="menubar">
                 <div className="left">
-                    <IconButton aria-label="back" disableRipple><NavigateBeforeRounded sx={iconButtonStyles} fontSize="large"/></IconButton>
-                    <IconButton aria-label="save" disableRipple><SaveOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
+                    <utton>
+                        <IconButton aria-label="back" disableRipple><NavigateBeforeRounded sx={iconButtonStyles} fontSize="large"/></IconButton>
+                    </utton>
+                    <button onClick={clickDownLoad(canvas)}>
+                        <IconButton aria-label="save" disableRipple><SaveOutlined sx={iconButtonStyles} fontSize="medium"/></IconButton>
+                    </button>
+                    
                 </div>
                 <div className="center">
                     <span> {children} </span>
@@ -84,7 +89,7 @@ const NoteHeader = ({children}) =>
                 </div>
             </div>
             <div className="toolbar"> 
-                    <IconButton aria-label="pen" onClick={() => {}} disableRipple ><Edit sx={toolButtonStyles} fontSize="40px"/></IconButton>
+                    <IconButton aria-label="pen" disableRipple ><Edit sx={toolButtonStyles} fontSize="40px"/></IconButton>
                     <IconButton aria-label="erasor" disableRipple><Crop32Outlined sx={toolButtonStyles} fontSize="40px"/></IconButton>
                     <IconButton aria-label="highlighter" disableRipple><BorderColorOutlined sx={toolButtonStyles} fontSize="40px"/></IconButton>
                     <IconButton aria-label="text" disableRipple><FormatShapes sx={toolButtonStyles} fontSize="40px"/></IconButton>
