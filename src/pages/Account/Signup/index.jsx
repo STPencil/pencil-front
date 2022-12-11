@@ -2,25 +2,16 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import TextField from "@mui/material/TextField"
-import CheckBox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Link from "@mui/material/Link"
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
 import Container from "@mui/system/Container";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-
 
 export default function Index(){
   const navigate = useNavigate();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [errorText, setErrorText] = useState("");
-
+  const [passwordTwo, setPasswordTwo] = useState("");
 
   const onChangeUserId = (e) => {
     setUserId(e.target.value);
@@ -30,21 +21,31 @@ export default function Index(){
     setPassword(e.target.value);
   };
 
-  const onClickLogin = async () => {
-    console.log("onclick in")
+  const onChangePasswordTwo = (e) => {
+    setPasswordTwo(e.target.value);
+  };
+
+  const onClickSignup = async () => {
+    if(password != passwordTwo){
+      alert("비밀번호와 비밀번호 확인란을 다시 확인해주세요.")
+      return
+    }
+    console.log("signup onclick")
     const result = await axios({
       method: "POST",
-      url: "http://localhost:8000/api/auth/login",
+      url: "http://localhost:8000/api/auth/signup",
       data: {
         userId: userId,
         password: password
       },
-    }).then(function (response) {
-      console.log(response.data)
+    },
+    ).then(function (response){
+      console.log("then in")
+      console.log(response)
       if (response) {
-        if (response.data.status) {
-          localStorage.setItem('token', response.data.token);
-          navigate('/main');
+        if (response.status == 200) {
+          console.log("navigate in")
+          navigate("/login");
         } else {
           alert('아이디 혹은 비밀번호를 다시 확인해주세요.')
         }
@@ -52,13 +53,14 @@ export default function Index(){
         alert('아이디 혹은 비밀번호를 다시 확인해주세요.')
       }
     }).catch(function (error){
-      console.log(error.response.status)
-      console.log(error.response.data.error)
-      if(error.response.status==401){
-        alert('아이디 혹은 비밀번호를 다시 확인해주세요.')
-      }
+      console.log(error)
+      alert('아이디 혹은 비밀번호를 다시 확인해주세요.')
     })
+    
   };
+
+  localStorage.removeItem('token')
+
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -67,16 +69,16 @@ export default function Index(){
             📋
           </div>
           <Typography component="h1" variant="h5" style={{fontWeight: "300", fontSize: "40px"}}>
-            Login
+            Signup
           </Typography>
           <TextField 
             label="id" 
             required 
             fullWidth 
             name="id"
+            autoFocus
             onChange={onChangeUserId}
             value={userId}
-            autoFocus
             margin="normal"
           />
           <TextField 
@@ -89,16 +91,25 @@ export default function Index(){
             value={password}
             margin="normal"
           />
-          <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}} onClick={() => onClickLogin()}>Login</Button>
-
-          <Grid container>
-            <Grid item xs>
-              <Link>"아직 회원가입 전이신가요?"</Link>
-            </Grid>
-            <Grid item>
-              <Link>"회원가입 하러가기"</Link>
-            </Grid>
-          </Grid>
+          <TextField 
+            label="password 확인" 
+            type="password" 
+            required 
+            fullWidth 
+            name="passwordTwo"
+            onChange={onChangePasswordTwo}
+            value={passwordTwo}
+            margin="normal"
+          />
+          <Button 
+            type="submit" 
+            fullWidth 
+            variant="contained" 
+            sx={{mt: 3, mb: 2}}
+            onClick={() => onClickSignup()}
+          >
+            Sign up
+          </Button>
         </Box>
       </Container>
     </div>
